@@ -12,10 +12,12 @@ Gem::Specification.new do |s|
   s.date = %q{2013-11-14}
   s.description = %q{Dynamically restrict access to your Rails application}
   s.email = %q{alp2200@columbia.edu}
+  s.homepage = 'https://rubygems.org/gems/mistiq'
+  s.license = %q{OSL-3.0}
   s.files = ["Rakefile", "lib/mistiq.rb", "lib/mistiq/base.rb", "lib/mistiq/middleware.rb", "lib/mistiq/init.rb", "lib/mistiq/defaults.rb", "bin/mistiq"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{2.1.5}
-  s.summary = %q{Dynamically restrict access to your Rails application}
+  s.summary = %q{Dynamically restrict access to your Rails application and while automatically adjusting the view of your application.}
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
