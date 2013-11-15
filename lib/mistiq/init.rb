@@ -5,6 +5,7 @@ module Mistiq
 			#to redact links in the views
 			Rails.application.config.after_initialize do
 				@LINK_REGEX_HASH = Hash.new
+				clashes = Hash.new
 
 				#pre-load routes
 				Rails.application.reload_routes!
@@ -18,7 +19,7 @@ module Mistiq
 					action = r.defaults[:action]
 					
 					route = r.path.spec.to_s
-					
+
 					#removes (.:format)
 					if route.match("(.:format)")
 						pattern = route.sub("(.:format)","")
@@ -49,10 +50,19 @@ module Mistiq
 					#espace / characters
 					pattern.gsub!(/\//,"\\/")
 					
+					#check if the current route clashes with another one
+					if !clashes[route].nil?
+						puts "Route clash at #{controller}##{action} for route #{route} with route for #{clashes[route]}"
+					else
+						#add route to the clashes hash to detect
+						#any future route clashes
+						clashes[route] = "#{controller}##{action}"
+					end
+
 					@LINK_REGEX_HASH["#{controller}##{action}"] = pattern
 				}
 				
-				puts "Link REGEX hash has been computed"
+				puts "Link REGEX hash has been computed. #{clashes.size} route clashes have been found."
 			end
 		end
 
