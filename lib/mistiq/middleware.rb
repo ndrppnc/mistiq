@@ -20,7 +20,7 @@ module Mistiq
 				
 				regex.each {
 					|r|			
-					temp = body.gsub(/#{r}/,"Redacted")
+					temp = body.gsub(/#{r}/,"")
 					if temp != nil
 						body = temp
 					end

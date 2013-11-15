@@ -9,10 +9,10 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Andrei Papancea"]
-  s.date = %q{2013-11-05}
+  s.date = %q{2013-11-14}
   s.description = %q{Dynamically restrict access to your Rails application}
   s.email = %q{alp2200@columbia.edu}
-  s.files = ["Rakefile", "lib/mistiq.rb", "lib/mistiq/base.rb", "lib/mistiq/middleware.rb", "lib/mistiq/init.rb", "bin/mistiq"]
+  s.files = ["Rakefile", "lib/mistiq.rb", "lib/mistiq/base.rb", "lib/mistiq/middleware.rb", "lib/mistiq/init.rb", "lib/mistiq/defaults.rb", "bin/mistiq"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{2.1.5}
   s.summary = %q{Dynamically restrict access to your Rails application}

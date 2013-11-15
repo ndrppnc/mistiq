@@ -1,8 +1,4 @@
 module Mistiq
-	def self.included(base)
-		#base.send(:before_filter, :set_guard_on)
-	end
-	
 	def initialize
 		super
 		@mode_class = self.class
@@ -41,45 +37,40 @@ module Mistiq
 				#only disable view if the current controller
 				#and view are the ones that need to be disabled
 				if(current_controller == pair_array[0] && current_action == pair_array[1])
-					disable(pair_array[0],pair_array[1],pair[2])
+					disable(pair_array[0],pair_array[1])
 				else
-					disable_action(pair_array[0],pair_array[1])
+					remove_links(pair_array[0],pair_array[1])
 				end
 			end
 		}
 	end
 	
 	#add a new rule to look out for
-	#takes in an optional parameter for the view to
-	#be rendered in place of the current one
-	def set_guard_rule(condition, consequence, alternate_view='denied')	
-		pair = [condition,consequence,alternate_view]
+	def set_guard_rule(condition, consequence)	
+		pair = [condition,consequence]
 		@@rules["#{@@count+=1}"] = pair
 		
-		puts "New rule has been added: #{consequence}, render #{alternate_view}"
+		puts "New rule has been added: #{consequence}"
 	end
 	
 	private
 	
 	#disable both the view and the action (links for the action in other views)
-	def disable(controller,action,alternate_view)
-		disable_view(controller,action,alternate_view)
+	def disable(controller,action)
 		disable_action(controller,action)
+		remove_links(controller,action)
 	end
-	
-	#disable the view when url is requested
-	def disable_view(controller,action,alternate_view)
-		render :text => action, :layout => alternate_view
-		puts "Disabled view for action #{action}, controller #{controller}"
-	end
-	
-	#disable the specified action in the controller
-	#by removing the links from the rendered HTML and by
-	#disabling the action in the model
+
+	#disable access to the action/controller by rerouting
 	def disable_action(controller,action)
+		redirect_to :root
+	end
+	
+	#remove the links from the rendered HTML for
+	#the specific action/controller
+	def remove_links(controller,action)
 		to_disable = "#{controller}##{action}"
 		ENV['REGEX'] += Railtie.get_regex_hash[to_disable]+"@@@"
 		puts "Removed links for action #{action}, controller #{controller}"
-		#TODO: should also disable ACTUAL action in the model
 	end
 end
