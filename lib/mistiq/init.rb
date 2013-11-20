@@ -5,13 +5,15 @@ module Mistiq
 			#to redact links in the views
 			Rails.application.config.after_initialize do
 				@LINK_REGEX_HASH = Hash.new
-				clashes = Hash.new
 
 				#pre-load routes
 				Rails.application.reload_routes!
 				
 				#get routes
 				routes = Rails.application.routes.routes
+
+				#for each routes.collect |route|
+				# => route 
 				
 				routes.each {
 					|r|
@@ -19,6 +21,7 @@ module Mistiq
 					action = r.defaults[:action]
 					
 					route = r.path.spec.to_s
+					verb = r.verb.source.to_s.gsub(/\^|\$/,"")
 
 					#removes (.:format)
 					if route.match("(.:format)")
@@ -37,32 +40,26 @@ module Mistiq
 					if pattern.match(/(:.*)/)
 						pattern.gsub!(/(:.*)/,"[^\/\"]*")
 					end
-					
-					if action == "destroy"
-						destroy_regex = "data-method=(\"|')delete(\"|')";
-						pattern = "<a.*#{destroy_regex}.*href=(\"|')#{pattern}(\"|').*>.*<\/a>"
-						#also check if destroy_regex occurs after the href attribute
-						pattern = pattern+"@@@<a.*href=(\"|')#{pattern}(\"|').*#{destroy_regex}.*>.*<\/a>"
-					else
-						pattern = "<a.*href=(\"|')#{pattern}(\"|').*>.*<\/a>"
+
+					#if action#controller's data method is not GET and not POST
+					if verb != "GET" && verb != "POST" && verb != ""
+						method_regex = "data-method=(\"|')#{verb.downcase}(\"|')";
+						pattern = "<a.*#{method_regex}.*href=(\"|')#{pattern}(\"|').*>.*<\/a>"
+
+						#also check if method_regex occurs after the href attribute
+						pattern = pattern+"@@@<a.*href=(\"|')#{method_regex}(\"|').*#{method_regex}.*>.*<\/a>"
+					elsif verb == "GET"
+						#if action#controller's data method is GET
+						pattern = "<a[^>]*href=(\"|')#{pattern}(\"|')[^>]*(?!.*data\-method)[^<]*<\/a>"
 					end
 					
-					#espace / characters
+					#escape / characters
 					pattern.gsub!(/\//,"\\/")
-					
-					#check if the current route clashes with another one
-					if !clashes[route].nil?
-						puts "Route clash at #{controller}##{action} for route #{route} with route for #{clashes[route]}"
-					else
-						#add route to the clashes hash to detect
-						#any future route clashes
-						clashes[route] = "#{controller}##{action}"
-					end
 
 					@LINK_REGEX_HASH["#{controller}##{action}"] = pattern
 				}
 				
-				puts "Link REGEX hash has been computed. #{clashes.size} route clashes have been found."
+				puts "Link REGEX hash has been computed. #{@LINK_REGEX_HASH.size} routes found."
 			end
 		end
 

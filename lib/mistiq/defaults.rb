@@ -13,7 +13,7 @@ module Mistiq
 	def disable_create_ops()
 		Railtie.get_regex_hash.each {
 			|r,p|
-			set_guard_rule(true,r) if r.match(/.*#add/) || r.match(/.*#create/) || r.match(/.*#new/)
+			set_guard_rule(true,r) if r.match(/.*#new/) || r.match(/.*#add/)
 		}
 	end
 
