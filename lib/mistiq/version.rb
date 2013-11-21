@@ -1,3 +1,3 @@
 module Mistiq
-  VERSION = "0.0.92"
+  VERSION = "0.0.922"
 end

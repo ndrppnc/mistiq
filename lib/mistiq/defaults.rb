@@ -8,6 +8,14 @@ module Mistiq
 		}
 	end
 
+	#disable all actions for a specific controller
+	def disable_controller(controller)
+		Railtie.get_regex_hash.each {
+			|r,p|
+			set_guard_rule(true,r) if r.match(/#{controller}.*/)
+		}
+	end
+
 	#disable all destroy operations across
 	#the rails application
 	def disable_create_ops()
