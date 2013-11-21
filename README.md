@@ -14,7 +14,7 @@ mistiq
     
         before_filter { |c| c.set_guard_rule(EVAL_FUNCTION, 'controller#action'[, strip_links]) }
     
-    <b>strip_links</b> is a boolean variable that determines whether the links for that <b>action#controller</b> should be stripped off or not.
+    <b>strip_links</b> is an optional boolean variable that determines whether the links for that <b>action#controller</b> should be stripped off or not. <b>strip_links</b> is <b>true</b> by default.
     
     Last, after you defined the rules, add the following line to check them before your application gets rendered:
     
