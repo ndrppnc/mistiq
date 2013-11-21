@@ -39,7 +39,7 @@ module Mistiq
 				if(current_controller == pair_array[0] && current_action == pair_array[1])
 					#if strip_links is true, then
 					#enable link removal
-					if pair_array[2]
+					if pair[2]
 						disable(pair_array[0],pair_array[1])
 					else
 						disable_action(pair_array[0],pair_array[1])
@@ -47,7 +47,7 @@ module Mistiq
 				else
 					#if strip_links is true, then
 					#enable link removal
-					if pair_array[2]
+					if pair[2]
 						remove_links(pair_array[0],pair_array[1])
 					end
 				end
