@@ -47,6 +47,47 @@ module Mistiq
 					end
 				}
 				
+				engine_routes = inspector.get_engine_routes
+
+				if engine_routes != nil
+					engine_routes.each {
+						|name, routes|
+
+						routes.each {
+							|r|
+
+							reqs = r[:reqs].split('#')
+
+							controller = reqs[0]
+							action = reqs[1]
+							
+							route = r[:path]
+							verb = r[:verb]
+
+							#get regex-ed route
+							regex_len = r[:regexp].length
+							regex = r[:regexp].slice(1..regex_len-2)
+
+							#if action#controller's data method is not GET and not POST
+							if verb != "GET" && verb != "POST" && verb != ""
+								method_regex = "data-method=(\"|')#{verb.downcase}(\"|')";
+								pattern = "<a.*#{method_regex}.*href=(\"|')#{regex}(\"|').*>.*<\/a>"
+
+								#also check if method_regex occurs after the href attribute
+								pattern = pattern+"@@@<a.*href=(\"|')#{regex}(\"|').*#{method_regex}.*>.*<\/a>"
+							elsif verb == "GET"
+								#if action#controller's data method is GET
+								#pattern = "<a(.*href=(\"|')#{pattern}(\"|'))(?!.*data\-method)[^<]*<\/a>"
+								pattern = "<a(?!.*data\-method)(.*href=(\"|')#{regex}(\"|'))[^<]*<\/a>"
+							end
+							
+							if verb == "GET" || (verb != "POST" && verb != "")
+								@LINK_REGEX_HASH["#{controller}##{action}"] = pattern
+							end
+						}
+					}
+				end
+
 				puts "Link REGEX hash has been computed. #{@LINK_REGEX_HASH.size} routes were hashed."
 			end
 		end
@@ -140,6 +181,10 @@ module Mistiq
 			routes_to_display = filter_routes(nil)
 			routes = collect_routes(routes_to_display)
 			return routes
+		end
+
+		def get_engine_routes
+			return @engines
 		end
 
 		private
