@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Andrei Papancea"]
-  s.date = %q{2013-11-14}
+  s.date = %q{2013-11-21}
   s.description = %q{Dynamically restrict access to your Rails application}
   s.email = %q{alp2200@columbia.edu}
   s.homepage = 'https://rubygems.org/gems/mistiq'

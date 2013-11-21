@@ -37,20 +37,30 @@ module Mistiq
 				#only disable view if the current controller
 				#and view are the ones that need to be disabled
 				if(current_controller == pair_array[0] && current_action == pair_array[1])
-					disable(pair_array[0],pair_array[1])
+					#if strip_links is true, then
+					#enable link removal
+					if pair_array[2]
+						disable(pair_array[0],pair_array[1])
+					else
+						disable_action(pair_array[0],pair_array[1])
+					end
 				else
-					remove_links(pair_array[0],pair_array[1])
+					#if strip_links is true, then
+					#enable link removal
+					if pair_array[2]
+						remove_links(pair_array[0],pair_array[1])
+					end
 				end
 			end
 		}
 	end
 	
 	#add a new rule to look out for
-	def set_guard_rule(condition, consequence)	
-		pair = [condition,consequence]
+	def set_guard_rule(condition, consequence, strip_links=true)	
+		pair = [condition,consequence,strip_links]
 		@@rules["#{@@count+=1}"] = pair
 		
-		puts "New rule has been added: #{consequence}"
+		puts "New rule has been added: #{consequence}, strip links: #{strip_links}"
 	end
 	
 	private
