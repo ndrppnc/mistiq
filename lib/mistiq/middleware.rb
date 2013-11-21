@@ -15,20 +15,24 @@ module Mistiq
 
 			#if the current file is an HTML document
 			if headers != nil && headers["Content-Type"] != nil && (headers["Content-Type"].include? "text/html")		
-				regex = ENV['REGEX'].split("@@@")
-				body = response.body
-				
-				regex.each {
-					|r|			
-					temp = body.gsub(/#{r}/,"")
-					if temp != nil
-						body = temp
-					end
-				}
+				if ENV['REGEX'] != nil
+					regex = ENV['REGEX'].split("@@@")
+					body = response.body
+					
+					regex.each {
+						|r|			
+						temp = body.gsub(/#{r}/,"")
+						if temp != nil
+							body = temp
+						end
+					}
 
-				#rebuild response
-				response = Rack::Response.new(body,status,headers)
-				response.finish
+					#rebuild response
+					response = Rack::Response.new(body,status,headers)
+					response.finish
+				else
+					[status, headers, response]
+				end
 			else
 				[status, headers, response]
 			end
