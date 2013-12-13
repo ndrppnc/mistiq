@@ -10,7 +10,7 @@ mistiq
     
         include Mistiq
     
-    Add rules that get triggered when your anomaly detector returns true. If it is, it will disable the <b>action</b> for the <b>controller</b>:
+    Add rules that get triggered when your anomaly detector returns true. If it does, it will disable the <b>action</b> for the <b>controller</b>:
     
         before_filter { |c| c.set_guard_rule(EVAL_FUNCTION, 'controller#action'[, strip_links]) }
     
